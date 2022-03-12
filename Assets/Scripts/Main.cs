@@ -22,6 +22,11 @@ public class Main : MonoBehaviour
 
     private ParallaxController _parallax;
 
+    private PlayerController _playerController;
+
+    private CameraController _cameraController;
+
+
     private void Start()
     {
         _playerAnimatorConfig = Resources.Load<SpriteAnimatorConfig>("SpriteAnimatorConfig");
@@ -31,10 +36,14 @@ public class Main : MonoBehaviour
             _parallax = new ParallaxController(_levelView.Camera, _levelView.Back);
             _playerAnimator.StartAnimation(_playerView.SpriteRenderer, AnimStatePlayer.Idle, true, _animationSpeed) ; 
         }
+        _playerController = new PlayerController(_playerView, _playerAnimator);
+        _cameraController = new CameraController(_playerView.Transform, _levelView.Camera);
     }
     private void Update()
     {
         _playerAnimator.Update();
         _parallax.Update();
+        _playerController.Update();
+        _cameraController.Update();
     }
 }

@@ -8,7 +8,7 @@ public class ParallaxController : IDisposable
     private Transform _back;
     private Vector3 _backStartPosition;
     private Vector3 _cameraStartPosition;
-    private const float _coef = 0.2f;
+    private const float _coef = 0.1f;
     public ParallaxController(Transform camera, Transform back)
     {
         _camera = camera;
@@ -20,7 +20,8 @@ public class ParallaxController : IDisposable
 
     public void Update()
     {
-        _back.position = _backStartPosition + (_camera.position - _cameraStartPosition) * _coef;
+       // _back.position = _backStartPosition + (_camera.position - _cameraStartPosition) * _coef;
+        _back.position = _backStartPosition + new Vector3((_camera.position.x - _cameraStartPosition.x) * _coef, 0, 0);
     }
 
     public void Dispose()
