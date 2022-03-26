@@ -6,4 +6,6 @@ public class LevelView : MonoBehaviour
 {
     public Transform Camera;
     public Transform Back;
+    public Sprite BackgroundSprite;
+    public Sprite MiddleGroundSprite;
 }

@@ -15,10 +15,10 @@ MonoBehaviour:
   Sequences:
   - Track: 0
     Sprites:
-    - {fileID: -4744724232239111109, guid: 967c82df8eb27574f9b0d007a91e862a, type: 3}
-    - {fileID: 5241860297644566261, guid: 967c82df8eb27574f9b0d007a91e862a, type: 3}
-    - {fileID: 456404381510539164, guid: 967c82df8eb27574f9b0d007a91e862a, type: 3}
-    - {fileID: -4228064520661559452, guid: 967c82df8eb27574f9b0d007a91e862a, type: 3}
+    - {fileID: 8793639957104055765, guid: 967c82df8eb27574f9b0d007a91e862a, type: 3}
+    - {fileID: 6084859605308855041, guid: 967c82df8eb27574f9b0d007a91e862a, type: 3}
+    - {fileID: 8603369663158992956, guid: 967c82df8eb27574f9b0d007a91e862a, type: 3}
+    - {fileID: -5906421172241655209, guid: 967c82df8eb27574f9b0d007a91e862a, type: 3}
   - Track: 1
     Sprites:
     - {fileID: -1882347247711912902, guid: 21f18139151ebcc48b123641f279d583, type: 3}
@@ -37,3 +37,20 @@ MonoBehaviour:
     - {fileID: 7014594740173477433, guid: c8b5c0fd42f4eac4db0eddcdcfca6d0f, type: 3}
     - {fileID: 1578323387413840467, guid: c8b5c0fd42f4eac4db0eddcdcfca6d0f, type: 3}
     - {fileID: 7655840988501763603, guid: c8b5c0fd42f4eac4db0eddcdcfca6d0f, type: 3}
+  - Track: 4
+    Sprites:
+    - {fileID: 7014594740173477433, guid: c8b5c0fd42f4eac4db0eddcdcfca6d0f, type: 3}
+    - {fileID: -3697937850672776721, guid: c8b5c0fd42f4eac4db0eddcdcfca6d0f, type: 3}
+    - {fileID: 4987614716155920338, guid: c8b5c0fd42f4eac4db0eddcdcfca6d0f, type: 3}
+    - {fileID: -1184746109927277663, guid: c8b5c0fd42f4eac4db0eddcdcfca6d0f, type: 3}
+    - {fileID: -4845626741048118468, guid: c8b5c0fd42f4eac4db0eddcdcfca6d0f, type: 3}
+  - Track: 7
+    Sprites:
+    - {fileID: -3316437661583186769, guid: 9ee898e8687a1b542a574a62b45dc366, type: 3}
+    - {fileID: 8990718453661354843, guid: 9ee898e8687a1b542a574a62b45dc366, type: 3}
+  - Track: 8
+    Sprites:
+    - {fileID: 5974857443207731813, guid: 9ee898e8687a1b542a574a62b45dc366, type: 3}
+    - {fileID: -1286846480614585512, guid: 9ee898e8687a1b542a574a62b45dc366, type: 3}
+    - {fileID: -4716468363168978379, guid: 9ee898e8687a1b542a574a62b45dc366, type: 3}
+    - {fileID: 5352652116806695986, guid: 9ee898e8687a1b542a574a62b45dc366, type: 3}

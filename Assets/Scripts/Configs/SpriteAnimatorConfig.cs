@@ -11,7 +11,11 @@ namespace Configs
         Idle = 0,
         Run = 1,
         Jump = 2,
-        Attack = 3
+        Fall = 5,
+        Somersault = 3,
+        Attack = 4,
+        WallSlide = 7,
+        WallClimb = 8
     }
 
 

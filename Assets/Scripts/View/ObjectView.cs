@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerView : MonoBehaviour
+public class ObjectView : MonoBehaviour
 {
     public SpriteRenderer SpriteRenderer;
     public Transform Transform;
