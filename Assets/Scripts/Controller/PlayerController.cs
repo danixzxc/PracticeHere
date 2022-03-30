@@ -34,6 +34,7 @@ namespace PlatformerMVC.Configs
         private Vector3 _leftScale = new Vector3(-1, 1, 1);
         private Vector3 _rightScale = new Vector3(1, 1, 1);
 
+        private AnimStatePlayer _track;
 
         private ObjectView _playerView;
         private SpriteAnimatorController _animator;
@@ -58,7 +59,6 @@ namespace PlatformerMVC.Configs
 
         public void Update()
         {
-            
 
             _contactPooler.Update();
             _animator.Update();
@@ -73,6 +73,8 @@ namespace PlatformerMVC.Configs
             {
                 _animator.StartAnimation
                     (_playerView.SpriteRenderer, _isMoving ? AnimStatePlayer.Run : AnimStatePlayer.Idle, true, _animationSpeed);
+                _track = AnimStatePlayer.Run;
+
                 if (_isJump && Mathf.Abs(_playerView.Rigidbody2D.velocity.y) <= _jumpThreshHold)
                 {
                     _playerView.Rigidbody2D.AddForce(Vector2.up * _jumpSpeed, ForceMode2D.Impulse);
@@ -84,22 +86,43 @@ namespace PlatformerMVC.Configs
                 {
                     _animator.StartAnimation
                         (_playerView.SpriteRenderer, AnimStatePlayer.Jump, true, _animationSpeed);
+                    _track = AnimStatePlayer.Jump;
                 }
             }
-            if ((_contactPooler.HasLeftContact && !_contactPooler.IsGrounded)  ||
-                (_contactPooler.HasRightContact && !_contactPooler.IsGrounded))
-                    {
+            if (Mathf.Abs(_playerView.Rigidbody2D.velocity.y) >= _jumpThreshHold && _track!=AnimStatePlayer.Jump) 
+            {
+                _animator.StartAnimation
+                    (_playerView.SpriteRenderer, AnimStatePlayer.Fall, true, _animationSpeed);
+                _track = AnimStatePlayer.Fall;
+
+            }
+            if ((_contactPooler.HasLeftContact || _contactPooler.HasRightContact) && !_contactPooler.IsGrounded)
+            {//для решения нынешней ситуации где все через апдейт вижу 2 варика - корутины или проверять каждый раз track
                 WallSlide();
+                if (_track != AnimStatePlayer.WallSlide)
+                {
+                    _animator.StartAnimation
+                  (_playerView.SpriteRenderer, AnimStatePlayer.WallSlide, true, _animationSpeed);
+                    _track = AnimStatePlayer.WallSlide;
+                }
             }
 
             _wallCollision = _contactPooler.HasLeftContact || _contactPooler.HasRightContact;
-            _wallGrab = _wallCollision && Input.GetKey(KeyCode.LeftShift);
-
-            if (_wallGrab)
+            _wallGrab = _wallCollision && Input.GetKey(KeyCode.LeftShift) && !_contactPooler.IsGrounded;
+            if (Input.GetKeyDown(KeyCode.LeftShift) && _wallCollision)
+            {
+                _animator.StartAnimation
+                           (_playerView.SpriteRenderer, AnimStatePlayer.WallClimb, true, _animationSpeed);
+                _track = AnimStatePlayer.WallClimb;
+            }//скольжение тоже неправильное!!! каждый кадр обновляется
+            //хз почему сейчас не работает вроде всё правильно. обратно вернуть всё равно смогу но думаю ответ почти правильный ща
+            if (Input.GetKeyUp(KeyCode.LeftShift))
+                _animator.StopAnimation(_playerView.SpriteRenderer);
+                if (_wallGrab )
             {
                 _playerView.Rigidbody2D.velocity = _playerView.Rigidbody2D.velocity.Change(y: _climbSpeed);
-                _animator.StartAnimation
-                         (_playerView.SpriteRenderer, AnimStatePlayer.WallClimb, true, _animationSpeed);
+                
+
                 //логика как с прыжком. если игрик растет то анимация залазания. а то шифт то постоянно нажат и аним не робит
             }
             if (_wallCollision && _isJump)
@@ -126,8 +149,8 @@ namespace PlatformerMVC.Configs
         public void WallSlide()
         {
             _playerView.Rigidbody2D.velocity = _playerView.Rigidbody2D.velocity.Change(y: -_slideSpeed);
-            _animator.StartAnimation
-                (_playerView.SpriteRenderer, AnimStatePlayer.WallSlide, true, _animationSpeed);
+            
+
             //Debug.Log("wall colission");
         }
     }
