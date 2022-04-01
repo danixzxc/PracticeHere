@@ -59,6 +59,9 @@ namespace PlatformerMVC.Configs
 
         public void Update()
         {
+            Debug.Log("Has left contact" + _contactPooler.HasLeftContact);
+            Debug.Log("Has right contact" + _contactPooler.HasRightContact);
+            Debug.Log("Has ground contact" + _contactPooler.IsGrounded);
 
             _contactPooler.Update();
             _animator.Update();
@@ -98,13 +101,14 @@ namespace PlatformerMVC.Configs
             }
             if ((_contactPooler.HasLeftContact || _contactPooler.HasRightContact) && !_contactPooler.IsGrounded)
             {//для решения нынешней ситуации где все через апдейт вижу 2 варика - корутины или проверять каждый раз track
+                //или переписать всё под обычную анимацию. Не, лень)
                 WallSlide();
-                if (_track != AnimStatePlayer.WallSlide)
-                {
+                
+                    Debug.Log("Sliding down");
                     _animator.StartAnimation
-                  (_playerView.SpriteRenderer, AnimStatePlayer.WallSlide, true, _animationSpeed);
+                  (_playerView.SpriteRenderer, AnimStatePlayer.WallSlide, false, _animationSpeed);
                     _track = AnimStatePlayer.WallSlide;
-                }
+                
             }
 
             _wallCollision = _contactPooler.HasLeftContact || _contactPooler.HasRightContact;
