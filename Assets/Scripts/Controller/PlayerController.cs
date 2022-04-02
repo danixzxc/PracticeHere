@@ -14,6 +14,7 @@ namespace PlatformerMVC.Configs
         private float _xAxisInput;
         private bool _isJump;
         private bool _isMoving;
+        private bool _isClimbing;
 
         private float _speed = 150f;
         private float _climbSpeed = 6f;
@@ -21,12 +22,12 @@ namespace PlatformerMVC.Configs
         private float _jumpSpeed = 9f;
         private float _slideSpeed = 2f;
         private float _movingThreshHold = .1f;
+        private float _climbingThreshHold = .1f;
         private float _jumpThreshHold = 1f;
 
         private bool _wallGrab = false;
         private bool _wallCollision = false;
 
-        private float _earthGravitation = -9.8f;
         private float _fallMultiplier = 2f;
         private float _lowJumpMultiplier = 2f;
         private float _yVelocity;
@@ -44,7 +45,6 @@ namespace PlatformerMVC.Configs
         {
             _playerView = player;
             _animator = animator;
-            _animator.StartAnimation(_playerView.SpriteRenderer, AnimStatePlayer.Idle, true, _animationSpeed);
             _contactPooler = new ContactPooler(_playerView.Collider2D);
         }
 
@@ -74,6 +74,8 @@ namespace PlatformerMVC.Configs
 
             if (_contactPooler.IsGrounded)
             {
+                Debug.Log("Playing idle or running animation" );
+
                 _animator.StartAnimation
                     (_playerView.SpriteRenderer, _isMoving ? AnimStatePlayer.Run : AnimStatePlayer.Idle, true, _animationSpeed);
                 _track = AnimStatePlayer.Run;
@@ -99,44 +101,34 @@ namespace PlatformerMVC.Configs
                 _track = AnimStatePlayer.Fall;
 
             }
-            if ((_contactPooler.HasLeftContact || _contactPooler.HasRightContact) && !_contactPooler.IsGrounded)
-            {//для решения нынешней ситуации где все через апдейт вижу 2 варика - корутины или проверять каждый раз track
-                //или переписать всё под обычную анимацию. Не, лень)
-                WallSlide();
-                
-                    Debug.Log("Sliding down");
-                    _animator.StartAnimation
-                  (_playerView.SpriteRenderer, AnimStatePlayer.WallSlide, false, _animationSpeed);
-                    _track = AnimStatePlayer.WallSlide;
-                
-            }
+
+
+
 
             _wallCollision = _contactPooler.HasLeftContact || _contactPooler.HasRightContact;
             _wallGrab = _wallCollision && Input.GetKey(KeyCode.LeftShift) && !_contactPooler.IsGrounded;
-            if (Input.GetKeyDown(KeyCode.LeftShift) && _wallCollision)
-            {
-                _animator.StartAnimation
-                           (_playerView.SpriteRenderer, AnimStatePlayer.WallClimb, true, _animationSpeed);
-                _track = AnimStatePlayer.WallClimb;
-            }//скольжение тоже неправильное!!! каждый кадр обновляется
-            //хз почему сейчас не работает вроде всё правильно. обратно вернуть всё равно смогу но думаю ответ почти правильный ща
-            if (Input.GetKeyUp(KeyCode.LeftShift))
-                _animator.StopAnimation(_playerView.SpriteRenderer);
-                if (_wallGrab )
-            {
-                _playerView.Rigidbody2D.velocity = _playerView.Rigidbody2D.velocity.Change(y: _climbSpeed);
-                
 
-                //логика как с прыжком. если игрик растет то анимация залазания. а то шифт то постоянно нажат и аним не робит
+            if (_wallCollision && !_contactPooler.IsGrounded)
+            {//для решения нынешней ситуации где все через апдейт вижу 2 варика - корутины или проверять каждый раз track
+                //или переписать всё под обычную анимацию. Не, лень)
+                WallSlide();
+                    _animator.StartAnimation
+                  (_playerView.SpriteRenderer,_wallGrab ? AnimStatePlayer.WallClimb : AnimStatePlayer.WallSlide, true, _animationSpeed);
+
             }
+            //а ещё контроллер всё еще переполнен информацией. но я сделал получше
+            //тонкости залазания на стенку и тд буду потом фиксить, сейчас главное основное
+           //!осталось это починить
             if (_wallCollision && _isJump)
-            {
                 _playerView.Rigidbody2D.velocity = Vector2.Lerp(_playerView.Rigidbody2D.velocity,
-                                                        (new Vector2(-_playerView.transform.localScale.x * _climbSpeed, // минус взгляд, потому что у меня сейчас перс в стенку смотрит а должен разворачиваться
+                                                        (new Vector2(_playerView.transform.localScale.x * _climbSpeed, //перед трансформом был минус. и так и так нет
                                                         _playerView.Rigidbody2D.velocity.y)), .5f * Time.deltaTime);
-                //вроде не робит
 
-            }
+
+
+            if (_wallGrab)
+                _playerView.Rigidbody2D.velocity = _playerView.Rigidbody2D.velocity.Change(y: _climbSpeed);
+
             //Better jump
             if (_playerView.Rigidbody2D.velocity.y < 0)
             {
