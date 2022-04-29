@@ -33,10 +33,11 @@ public class Main : MonoBehaviour
 
     private void Start()
     {
-        _coinAnimatorConfig = Resources.Load<SpriteAnimatorConfig>("CoinAnimationConfig");
+        //куча всего одинаково объ€вл€етс€ и вызываетс€ апдейт. разве такой должен быть мейн? можно ли это прокинуть в один метод или цикл в массиве, или в целом пофиг ваще
+        _coinAnimatorConfig = Resources.Load<SpriteAnimatorConfig>("CoinAnimationConfig"); 
         if (_coinAnimatorConfig) _coinAnimator = new SpriteAnimatorController(_coinAnimatorConfig);
 
-        _playerAnimatorConfig = Resources.Load<SpriteAnimatorConfig>("SpriteAnimatorConfig");
+        _playerAnimatorConfig = Resources.Load<SpriteAnimatorConfig>("SpriteAnimatorConfig");//он и в сериалайзед прокинуть мышкой и через resources load
         if (_playerAnimatorConfig)
         {
             _playerAnimator = new SpriteAnimatorController(_playerAnimatorConfig);
@@ -55,7 +56,7 @@ public class Main : MonoBehaviour
     private void Update()
     {
         _parallax.Update();
-        _playerController.Update();
+        _playerController.Update(); // TODO мне не весь контроллер переделывать. просто не из конфига брать анимацию а из юнити анимаций, но логика така€ же, просто булки мен€ть
         _cameraController.Update();
         _canonAimController.Update();
         _bulletEmitterController.Update();
