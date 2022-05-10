@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Configs;
 
-public class SpriteAnimatorController : IDisposable
+public class SpriteAnimatorController : IDisposable //этот контроллер полностью не нужен будет. он именно за смену кадров отвечает
 {
     private sealed class Animation
     {

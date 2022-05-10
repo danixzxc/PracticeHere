@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Configs
 {
-    public enum AnimStatePlayer
+    public enum AnimStatePlayer //это реализовывается по-другому. столько кода не надо
     {
         Idle = 0,
         Run = 1,
@@ -29,6 +29,8 @@ namespace Configs
         {
             public AnimStatePlayer Track;
             public List<Sprite> Sprites = new List<Sprite>();
+            public Animator Animator; //  мне нужен будет только аниматор, всё вроде в аниматоре лежит
+            //Debug.Log("ReWriting Animations");
         }
     }
 }

@@ -13,6 +13,9 @@ public class Main : MonoBehaviour
     [SerializeField] private LevelView _levelView;
     [SerializeField] private CannonView _canonView;
 
+    [SerializeField] private Animator animator;
+
+
     [SerializeField] private List<CoinView> _coinViews;
 
     private SpriteAnimatorConfig _coinAnimatorConfig;
@@ -36,7 +39,6 @@ public class Main : MonoBehaviour
         //куча всего одинаково объ€вл€етс€ и вызываетс€ апдейт. разве такой должен быть мейн? можно ли это прокинуть в один метод или цикл в массиве, или в целом пофиг ваще
         _coinAnimatorConfig = Resources.Load<SpriteAnimatorConfig>("CoinAnimationConfig"); 
         if (_coinAnimatorConfig) _coinAnimator = new SpriteAnimatorController(_coinAnimatorConfig);
-
         _playerAnimatorConfig = Resources.Load<SpriteAnimatorConfig>("SpriteAnimatorConfig");//он и в сериалайзед прокинуть мышкой и через resources load
         if (_playerAnimatorConfig)
         {
@@ -44,7 +46,7 @@ public class Main : MonoBehaviour
             _parallax = new ParallaxController(_levelView.Camera, _levelView.Back, _levelView.MiddleGroundSprite);
             _playerAnimator.StartAnimation(_playerView.SpriteRenderer, AnimStatePlayer.Idle, true, _animationSpeed) ; 
         }
-        _playerController = new PlayerController(_playerView, _playerAnimator);
+        _playerController = new PlayerController(_playerView, animator);
         _cameraController = new CameraController(_playerView.Transform, _levelView.Camera);
 
         _canonAimController = new CanonAimController(_canonView.MuzzleTransform, _playerView.Transform);
@@ -55,11 +57,13 @@ public class Main : MonoBehaviour
     }
     private void Update()
     {
+        //Debug.Log("Hello world!" + Time.realtimeSinceStartup);
+        Debug.Log(Time.frameCount);
         _parallax.Update();
         _playerController.Update(); // TODO мне не весь контроллер переделывать. просто не из конфига брать анимацию а из юнити анимаций, но логика така€ же, просто булки мен€ть
         _cameraController.Update();
         _canonAimController.Update();
         _bulletEmitterController.Update();
-        _coinAnimator.Update();
+        //_coinAnimator.Update(); нужно будет переписать контроллеры и аниматоры, все вьюшки по мвс чтобы кодом на сцену спавн был. но наверн анимаци€ монетки на префабе - хорошее решенее, без гиперинженеринга
     }
 }

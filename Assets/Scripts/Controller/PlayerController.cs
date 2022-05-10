@@ -36,11 +36,11 @@ namespace PlatformerMVC.Configs
         private AnimStatePlayer _track;
 
         private ObjectView _playerView;
-        private SpriteAnimatorController _animator;
+        private Animator _animator;
         private readonly ContactPooler _contactPooler;
 
         #endregion
-        public PlayerController(ObjectView player, SpriteAnimatorController animator)
+        public PlayerController(ObjectView player, Animator animator)
         {
             _playerView = player;
             _animator = animator;
@@ -59,7 +59,6 @@ namespace PlatformerMVC.Configs
         public void Update()
         {
             _contactPooler.Update();
-            _animator.Update();
             _xAxisInput = Input.GetAxis("Horizontal");
             _isJump = Input.GetAxis("Vertical") > 0;
             _isMoving = Mathf.Abs(_xAxisInput) > _movingThreshHold;
@@ -70,7 +69,7 @@ namespace PlatformerMVC.Configs
             if (_contactPooler.IsGrounded)
             {
                 PlayerStartAnimation(_isMoving ? AnimStatePlayer.Run : AnimStatePlayer.Idle);
-
+                _animator.SetBool("isRunning", _isMoving);
 
                 if (_isJump && Mathf.Abs(_playerView.Rigidbody2D.velocity.y) <= _jumpThreshHold)
                 {
@@ -112,9 +111,10 @@ namespace PlatformerMVC.Configs
 
         private void PlayerStartAnimation(AnimStatePlayer animStatePlayer)
         {
-            _animator.StartAnimation
-                      (_playerView.SpriteRenderer, animStatePlayer, true, _animationSpeed);
-            _track = animStatePlayer;
+            //_animator.StartAnimation
+            //          (_playerView.SpriteRenderer, animStatePlayer, true, _animationSpeed);
+            //_track = animStatePlayer;
+            //как начальный костыль мб использовать в контроллере анимаций track, он в коде уже реализован, а потом код переписать? хотя фигня
         }
 
         private void BetterJump()
