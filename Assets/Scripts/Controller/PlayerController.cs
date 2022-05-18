@@ -65,11 +65,11 @@ namespace PlatformerMVC.Configs
             _playerView.transform.rotation = new Quaternion(_playerView.transform.rotation.x, _playerView.transform.rotation.y, 0, _playerView.transform.rotation.w);
             if (_isMoving) MoveTowards();
 
+            _animator.SetBool("isRunning", _isMoving);
 
             if (_contactPooler.IsGrounded)
             {
                 PlayerStartAnimation(_isMoving ? AnimStatePlayer.Run : AnimStatePlayer.Idle);
-                _animator.SetBool("isRunning", _isMoving);
 
                 if (_isJump && Mathf.Abs(_playerView.Rigidbody2D.velocity.y) <= _jumpThreshHold)
                 {
@@ -81,12 +81,13 @@ namespace PlatformerMVC.Configs
                 if ((_isJump && Mathf.Abs(_playerView.Rigidbody2D.velocity.y) >= _jumpThreshHold))
                 {
                     PlayerStartAnimation(AnimStatePlayer.Jump);
+                    _animator.SetTrigger("Jumped");
+
                 }
             }
             if (Mathf.Abs(_playerView.Rigidbody2D.velocity.y) >= _jumpThreshHold && _track!=AnimStatePlayer.Jump) 
             {
                 PlayerStartAnimation(AnimStatePlayer.Fall);
-
             }
 
 

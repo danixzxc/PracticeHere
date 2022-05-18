@@ -30,7 +30,6 @@ namespace Configs
             public AnimStatePlayer Track;
             public List<Sprite> Sprites = new List<Sprite>();
             public Animator Animator; //  мне нужен будет только аниматор, всё вроде в аниматоре лежит
-            //Debug.Log("ReWriting Animations");
         }
     }
 }

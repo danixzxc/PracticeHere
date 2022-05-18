@@ -19,11 +19,6 @@ public class CoinsController : IDisposable
         _coinAnimator = coinAnimator;
         _coinViews = coinViews;
         _playerView.OnObjectContact += OnLevelObjectContact; //Event Subscribe
-        foreach (var coinView in _coinViews)
-        {
-            _coinAnimator.StartAnimation
-                (coinView.SpriteRenderer, AnimStatePlayer.Run, true, _animationsSpeed);
-        }
     }
 
     public void OnLevelObjectContact(CoinView contactObjectView)
