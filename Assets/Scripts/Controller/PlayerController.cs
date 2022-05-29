@@ -18,7 +18,6 @@ namespace PlatformerMVC.Configs
 
         private float _speed = 150f;
         private float _climbSpeed = 6f;
-        private float _animationSpeed = 4f;
         private float _jumpSpeed = 9f;
         private float _slideSpeed = 2f;
         private float _movingThreshHold = .1f;
@@ -65,10 +64,12 @@ namespace PlatformerMVC.Configs
             _playerView.transform.rotation = new Quaternion(_playerView.transform.rotation.x, _playerView.transform.rotation.y, 0, _playerView.transform.rotation.w);
             if (_isMoving) MoveTowards();
 
-            _animator.SetBool("isRunning", _isMoving);
 
             if (_contactPooler.IsGrounded)
             {
+
+                _animator.SetBool("isRunning", _isMoving);
+
                 PlayerStartAnimation(_isMoving ? AnimStatePlayer.Run : AnimStatePlayer.Idle);
 
                 if (_isJump && Mathf.Abs(_playerView.Rigidbody2D.velocity.y) <= _jumpThreshHold)

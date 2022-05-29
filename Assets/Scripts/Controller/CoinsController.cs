@@ -6,17 +6,14 @@ using System;
 
 public class CoinsController : IDisposable
 {
-    private const float _animationsSpeed = 10;
 
     private ObjectView _playerView;
-    private SpriteAnimatorController _coinAnimator;
     private List<CoinView> _coinViews;
 
 
-    public CoinsController(ObjectView player, SpriteAnimatorController coinAnimator, List<CoinView> coinViews)
+    public CoinsController(ObjectView player, List<CoinView> coinViews)
     {
         _playerView = player;
-        _coinAnimator = coinAnimator;
         _coinViews = coinViews;
         _playerView.OnObjectContact += OnLevelObjectContact; //Event Subscribe
     }
@@ -25,7 +22,6 @@ public class CoinsController : IDisposable
     {
         if (_coinViews.Contains(contactObjectView))
         {
-            _coinAnimator.StopAnimation(contactObjectView.SpriteRenderer);
             GameObject.Destroy(contactObjectView.gameObject);
         }
     }
