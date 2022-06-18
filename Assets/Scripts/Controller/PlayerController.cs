@@ -69,6 +69,7 @@ namespace PlatformerMVC.Configs
             {
 
                 _animator.SetBool("isRunning", _isMoving);
+                Debug.Log(_isMoving + "is Moving");
 
                 PlayerStartAnimation(_isMoving ? AnimStatePlayer.Run : AnimStatePlayer.Idle);
 
@@ -89,6 +90,9 @@ namespace PlatformerMVC.Configs
             if (Mathf.Abs(_playerView.Rigidbody2D.velocity.y) >= _jumpThreshHold && _track!=AnimStatePlayer.Jump) 
             {
                 PlayerStartAnimation(AnimStatePlayer.Fall);
+                _animator.SetTrigger("isFalling");
+
+
             }
 
 
@@ -134,6 +138,7 @@ namespace PlatformerMVC.Configs
         public void WallSlide()
         {
             _playerView.Rigidbody2D.velocity = _playerView.Rigidbody2D.velocity.Change(y: -_slideSpeed);
+            //anim?
         }
     }
 
