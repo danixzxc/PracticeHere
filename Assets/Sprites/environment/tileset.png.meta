@@ -104,6 +104,18 @@ TextureImporter:
   - first:
       213: -6468910726198660926
     second: tileset_33
+  - first:
+      213: -6157781805458569218
+    second: tileset_34
+  - first:
+      213: 3048538982666575687
+    second: tileset_35
+  - first:
+      213: -1518774645772049220
+    second: tileset_36
+  - first:
+      213: -3697150339598545061
+    second: tileset_37
   externalObjects: {}
   serializedVersion: 11
   mipmaps:

@@ -32,8 +32,6 @@ namespace PlatformerMVC.Configs
         private Vector3 _leftScale = new Vector3(-1, 1, 1);
         private Vector3 _rightScale = new Vector3(1, 1, 1);
 
-        private AnimStatePlayer _track;
-
         private ObjectView _playerView;
         private Animator _animator;
         private readonly ContactPooler _contactPooler;
@@ -57,6 +55,8 @@ namespace PlatformerMVC.Configs
 
         public void Update()
         {
+            _animator.SetBool("isGrounded", _contactPooler.IsGrounded);
+            _animator.SetBool("isJumping", !_contactPooler.IsGrounded);
             _contactPooler.Update();
             _xAxisInput = Input.GetAxis("Horizontal");
             _isJump = Input.GetAxis("Vertical") > 0;
@@ -67,11 +67,11 @@ namespace PlatformerMVC.Configs
 
             if (_contactPooler.IsGrounded)
             {
+                _animator.SetBool("isFalling", false);
 
-                _animator.SetBool("isRunning", _isMoving);
-                Debug.Log(_isMoving + "is Moving");
+                _animator.SetBool("isMoving", _isMoving);
 
-                PlayerStartAnimation(_isMoving ? AnimStatePlayer.Run : AnimStatePlayer.Idle);
+               // PlayerStartAnimation(_isMoving ? AnimStatePlayer.Run : AnimStatePlayer.Idle);
 
                 if (_isJump && Mathf.Abs(_playerView.Rigidbody2D.velocity.y) <= _jumpThreshHold)
                 {
@@ -80,19 +80,14 @@ namespace PlatformerMVC.Configs
             }
             else
             {
-                if ((_isJump && Mathf.Abs(_playerView.Rigidbody2D.velocity.y) >= _jumpThreshHold))
+                if (_isJump && Mathf.Abs(_playerView.Rigidbody2D.velocity.y) >= _jumpThreshHold)
                 {
-                    PlayerStartAnimation(AnimStatePlayer.Jump);
-                    _animator.SetTrigger("Jumped");
-
+                    _animator.SetBool("isJumping", true);
                 }
             }
-            if (Mathf.Abs(_playerView.Rigidbody2D.velocity.y) >= _jumpThreshHold && _track!=AnimStatePlayer.Jump) 
+            if (Mathf.Abs(_playerView.Rigidbody2D.velocity.y) <= _jumpThreshHold )//&& _animator.GetBool("isJumping") == true) 
             {
-                PlayerStartAnimation(AnimStatePlayer.Fall);
-                _animator.SetTrigger("isFalling");
-
-
+                _animator.SetBool("isFalling", true);
             }
 
 
@@ -100,13 +95,18 @@ namespace PlatformerMVC.Configs
             _wallCollision = (_contactPooler.HasLeftContact || _contactPooler.HasRightContact) && !_contactPooler.IsGrounded;
             _wallGrab = _wallCollision && Input.GetKey(KeyCode.LeftShift) ;
 
+            _animator.SetBool("wallClimb", _wallGrab);
+            _animator.SetBool("wallSlide", _wallCollision);
+
+
+
             if (_wallCollision)
             {
                 WallSlide();
-                PlayerStartAnimation(_wallGrab ? AnimStatePlayer.WallClimb : AnimStatePlayer.WallSlide);
-
+                //  PlayerStartAnimation(_wallGrab ? AnimStatePlayer.WallClimb : AnimStatePlayer.WallSlide);
+               // _animator.SetBool(_wallGrab ? "wallClimb" : "wallSlide", true);
             }
-            
+
 
             if (_wallGrab)
                 _playerView.Rigidbody2D.velocity = _playerView.Rigidbody2D.velocity.Change(y: _climbSpeed);
@@ -115,13 +115,6 @@ namespace PlatformerMVC.Configs
 
         }
 
-        private void PlayerStartAnimation(AnimStatePlayer animStatePlayer)
-        {
-            //_animator.StartAnimation
-            //          (_playerView.SpriteRenderer, animStatePlayer, true, _animationSpeed);
-            //_track = animStatePlayer;
-            //как начальный костыль мб использовать в контроллере анимаций track, он в коде уже реализован, а потом код переписать? хотя фигня
-        }
 
         private void BetterJump()
         { 
